@@ -6,10 +6,13 @@ readme = "README.md"
 license = "MIT"
 requires-python = ">=3.12,<3.13"
 # Runtime dependencies are added per phase (see docs/decisions.md).
-dependencies = []
+dependencies = [
+    "duckdb>=2.0.0",
+]
 
 [dependency-groups]
 dev = [
+    "ipykernel>=7.4.0",
     "pre-commit",
     "pytest",
     "ruff",
