@@ -218,3 +218,23 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- Project-specific ---
+# Data: raw and processed files never go into Git (only folder placeholders)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+*.csv
+*.parquet
+*.duckdb
+*.duckdb.wal
+
+# Experiment tracking
+mlruns/
+mlartifacts/
+
+# Claude Code (local assistant config, not part of the project)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
