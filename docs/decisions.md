@@ -55,3 +55,21 @@ Format: date · decision · alternatives · trade-off.
 - **Decision:** Store the timestamp as `TIMESTAMP` without time zone.
 - **Alternatives:** `TIMESTAMPTZ` with an assumed UTC.
 - **Trade-off:** The raw data has no time zone, so a naive type does not invent information. Assumption: all timestamps share one unknown time zone and there are no DST shifts. The cost is that time-of-day features cannot be interpreted as local business hours.
+
+## 2026-11-04 · Schema decisions from raw-data profiling (notebook 01)
+
+- **Decision:** Amounts as `DECIMAL(19,6)` (max. 13 integer digits, 6 decimal places for Bitcoin). Bank and account IDs as `VARCHAR`, because 58 bank IDs would collide as integers (e.g. `0015` vs. `015`). Label as `BOOLEAN`. Own snake_case column names with `auto_detect=false`.
+- **Alternatives:** `DECIMAL(18,2)` (silently truncates Bitcoin amounts); integer IDs; label as integer.
+- **Trade-off:** The schema is exact and fails loudly. The cost is an explicit conversion step for modelling (float amounts, 0/1 label).
+
+## 2026-11-04 · Validation rules from raw-data profiling
+
+- **Decision:** Validation fails on nulls, on amounts ≤ 0, and on currencies or payment formats outside fixed allowlists (15 currencies, 7 formats). Payment format and currency are not linked by a hard rule (78 rows with format `Bitcoin` and a non-Bitcoin currency). The 9 exact duplicate rows are kept and their count is logged.
+- **Alternatives:** Treat zero amounts as valid; drop duplicates; enforce format `Bitcoin` ⇔ currency `Bitcoin`.
+- **Trade-off:** Strict rules surface broken input files immediately. The cost is that a future file with legitimate zero amounts would stop the pipeline until the rule is revisited. Duplicates cannot be told apart from genuine repeats at minute resolution, so dropping them could delete real transactions.
+
+## 2026-11-04 · transaction_id as row number in file order
+
+- **Decision:** `transaction_id` = `row_number() OVER ()` while reading the raw CSV.
+- **Alternatives:** Content-based ID (hash of all columns plus an ordinal within identical rows).
+- **Trade-off:** The ID is simple, sequential and easy to explain. The cost is that it relies on DuckDB preserving file order when reading in parallel, which is the default behaviour but not formally guaranteed for a window without `ORDER BY`. An idempotence test (two runs, identical IDs) guards against this.

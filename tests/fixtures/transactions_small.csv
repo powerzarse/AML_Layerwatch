@@ -1,0 +1,5 @@
+Timestamp,From Bank,Account,To Bank,Account,Amount Received,Receiving Currency,Amount Paid,Payment Currency,Payment Format,Is Laundering
+2022/09/01 00:20,010,8000EBD30,010,8000EBD30,3697.34,US Dollar,3697.34,US Dollar,Reinvestment,0
+2022/09/01 16:20,012004,800C927C1,0220,813D8C1E1,0.000008,Bitcoin,0.000008,Bitcoin,Bitcoin,0
+2022/09/01 16:20,012004,800C927C1,0220,813D8C1E1,0.000008,Bitcoin,0.000008,Bitcoin,Bitcoin,0
+2022/09/02 09:56,021174,800737690,00220,8007A5B70,5738987.96,US Dollar,5738987.96,US Dollar,ACH,1

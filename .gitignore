@@ -226,6 +226,7 @@ data/processed/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 *.csv
+!tests/fixtures/*.csv
 *.parquet
 *.duckdb
 *.duckdb.wal
